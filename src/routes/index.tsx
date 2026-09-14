@@ -1,24 +1,38 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { KentekenChecker } from "@/components/kenteken-checker/KentekenChecker";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Kenteken checker — prijs voor jouw auto | Autoservice" },
+      {
+        name: "description",
+        content:
+          "Vul je kenteken in, wij halen je autogegevens op via de RDW en rekenen vrijblijvend uit wat APK, onderhoud of airco service kost.",
+      },
+      { property: "og:title", content: "Kenteken checker — prijs voor jouw auto" },
+      {
+        property: "og:description",
+        content: "Kenteken invullen, autogegevens uit de RDW en direct een vrijblijvende prijs.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <main className="min-h-screen bg-muted/40 px-4 py-12 md:py-20">
+      <div className="mx-auto max-w-5xl">
+        <h1 className="sr-only">Kenteken checker</h1>
+        <KentekenChecker
+          onSubmit={(request) => {
+            console.log("Aanvraag:", request);
+          }}
+        />
+      </div>
+    </main>
   );
 }
