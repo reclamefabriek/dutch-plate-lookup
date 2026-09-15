@@ -1,5 +1,5 @@
 import { createElement } from "react";
-import { renderAsync } from "@react-email/render";
+import { render } from "@react-email/render";
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { sendTemplateEmail } from "@/lib/email-templates/send-email";
@@ -69,7 +69,7 @@ export const Route = createFileRoute("/api/public/kenteken-aanvraag")({
         const id = crypto.randomUUID();
         const useSmtp = smtpConfigured();
         const html = useSmtp
-          ? await renderAsync(createElement(template.component, parsed))
+          ? await render(createElement(template.component, parsed))
           : "";
         const subject = template.subject(parsed);
 
