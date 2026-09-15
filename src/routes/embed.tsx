@@ -16,6 +16,13 @@ function Embed() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Transparante achtergrond zodat de checker naadloos in elke website past.
+    document.documentElement.style.backgroundColor = "transparent";
+    document.body.style.backgroundColor = "transparent";
+    document.body.style.backgroundImage = "none";
+  }, []);
+
+  useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const post = () => {
