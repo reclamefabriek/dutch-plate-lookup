@@ -23,10 +23,13 @@ export type KentekenRequest = {
 };
 
 type Props = {
-  /** Optionele handler om de aanvraag ergens naartoe te sturen. */
+  /** Optionele handler die ook wordt aangeroepen na een geslaagde verzending. */
   onSubmit?: (request: KentekenRequest) => Promise<void> | void;
+  /** Basis-URL van de API, bijv. wanneer de component op een ander domein staat. */
+  apiBase?: string;
   className?: string;
 };
+
 
 type Service = { id: string; title: string; subtitle: string; icon: typeof Wrench };
 
