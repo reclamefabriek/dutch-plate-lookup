@@ -72,13 +72,20 @@ export const Route = createFileRoute("/api/public/kenteken-aanvraag")({
           ),
         );
 
-        const failed = results.filter((r) => r.status === "rejected");
+        const failed = results.filter((r) => r.status === "rejected") as PromiseRejectedResult[];
         for (const f of failed) {
-          console.error("Kenteken aanvraag mail mislukt:", (f as PromiseRejectedResult).reason);
+          console.error("Kenteken aanvraag mail mislukt:", f.reason);
         }
-        if (failed.length === results.length) {
+        // Domain not yet verified / emails disabled: server-side state, not a
+        // visitor problem — accept the request instead of showing an error.
+        const pendingDomain = failed.some((f) => {
+          const code = (f.reason as { code?: string })?.code;
+          return code === "domain_not_verified" || code === "emails_disabled";
+        });
+        if (failed.length === results.length && !pendingDomain) {
           return json({ error: "Versturen mislukt." }, 502);
         }
+
 
         return json({ ok: true });
       },
