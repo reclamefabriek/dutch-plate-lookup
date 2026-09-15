@@ -120,14 +120,34 @@ export function KentekenChecker({ onSubmit, className }: Props) {
     setFormError(null);
     setLoading(true);
     try {
-      await onSubmit?.({
+      const request: KentekenRequest = {
         plate: vehicle.kenteken,
         vehicle,
         service: service.title,
         name: name.trim(),
         phone: phone.trim(),
         note: note.trim(),
+      };
+
+      const response = await fetch(`${apiBase}/api/public/kenteken-aanvraag`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          plate: vehicle.kenteken,
+          car: `${vehicle.merk} ${vehicle.model}`.trim(),
+          bouwjaar: vehicle.bouwjaar,
+          kleur: vehicle.kleur,
+          brandstof: vehicle.brandstof ?? "",
+          apkTot: vehicle.apkTot ?? "",
+          service: service.title,
+          name: request.name,
+          phone: request.phone,
+          note: request.note,
+        }),
       });
+      if (!response.ok) throw new Error("send failed");
+
+      await onSubmit?.(request);
       setStep(4);
     } catch {
       setFormError("Het versturen lukte niet. Probeer het nog een keer.");
@@ -135,6 +155,7 @@ export function KentekenChecker({ onSubmit, className }: Props) {
       setLoading(false);
     }
   }
+
 
   const carName = vehicle ? `${vehicle.merk} ${vehicle.model}`.trim() : "";
 
