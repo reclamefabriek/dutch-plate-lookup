@@ -23,10 +23,13 @@ export type KentekenRequest = {
 };
 
 type Props = {
-  /** Optionele handler om de aanvraag ergens naartoe te sturen. */
+  /** Optionele handler die ook wordt aangeroepen na een geslaagde verzending. */
   onSubmit?: (request: KentekenRequest) => Promise<void> | void;
+  /** Basis-URL van de API, bijv. wanneer de component op een ander domein staat. */
+  apiBase?: string;
   className?: string;
 };
+
 
 type Service = { id: string; title: string; subtitle: string; icon: typeof Wrench };
 
@@ -74,7 +77,7 @@ function GroupLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function KentekenChecker({ onSubmit, className }: Props) {
+export function KentekenChecker({ onSubmit, apiBase = "", className }: Props) {
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [plate, setPlate] = useState("");
   const [vehicle, setVehicle] = useState<VehicleInfo | null>(null);
@@ -120,14 +123,34 @@ export function KentekenChecker({ onSubmit, className }: Props) {
     setFormError(null);
     setLoading(true);
     try {
-      await onSubmit?.({
+      const request: KentekenRequest = {
         plate: vehicle.kenteken,
         vehicle,
         service: service.title,
         name: name.trim(),
         phone: phone.trim(),
         note: note.trim(),
+      };
+
+      const response = await fetch(`${apiBase}/api/public/kenteken-aanvraag`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          plate: vehicle.kenteken,
+          car: `${vehicle.merk} ${vehicle.model}`.trim(),
+          bouwjaar: vehicle.bouwjaar,
+          kleur: vehicle.kleur,
+          brandstof: vehicle.brandstof ?? "",
+          apkTot: vehicle.apkTot ?? "",
+          service: service.title,
+          name: request.name,
+          phone: request.phone,
+          note: request.note,
+        }),
       });
+      if (!response.ok) throw new Error("send failed");
+
+      await onSubmit?.(request);
       setStep(4);
     } catch {
       setFormError("Het versturen lukte niet. Probeer het nog een keer.");
@@ -135,6 +158,7 @@ export function KentekenChecker({ onSubmit, className }: Props) {
       setLoading(false);
     }
   }
+
 
   const carName = vehicle ? `${vehicle.merk} ${vehicle.model}`.trim() : "";
 
