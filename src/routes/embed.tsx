@@ -35,11 +35,7 @@ function Embed() {
 
   return (
     <main ref={ref} className="px-2 py-2">
-      <KentekenChecker
-        onSubmit={(request) => {
-          console.log("Aanvraag:", request);
-        }}
-      />
+      <KentekenChecker />
     </main>
   );
 }
