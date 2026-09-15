@@ -67,12 +67,20 @@ export const Route = createFileRoute("/api/public/kenteken-aanvraag")({
         }
 
         const id = crypto.randomUUID();
+        const useSmtp = smtpConfigured();
+        const html = useSmtp
+          ? await renderAsync(createElement(template.component, parsed))
+          : "";
+        const subject = template.subject(parsed);
+
         const results = await Promise.allSettled(
           NOTIFY.map((to) =>
-            sendTemplateEmail("kenteken-aanvraag", to, {
-              templateData: parsed,
-              idempotencyKey: `kenteken-aanvraag-${id}-${to}`,
-            }),
+            useSmtp
+              ? sendViaSmtp({ to, subject, html })
+              : sendTemplateEmail("kenteken-aanvraag", to, {
+                  templateData: parsed,
+                  idempotencyKey: `kenteken-aanvraag-${id}-${to}`,
+                }),
           ),
         );
 
