@@ -25,13 +25,14 @@ interface Props {
   note?: string;
 }
 
-const Row = ({ label, value }: { label: string; value?: string }) =>
+const Row = ({ label, value }: { label: string; value: string | undefined }) =>
   value ? (
     <Text style={row}>
       <span style={rowLabel}>{label}</span>
       <span style={rowValue}>{value}</span>
     </Text>
   ) : null;
+
 
 const Email = ({
   plate,
