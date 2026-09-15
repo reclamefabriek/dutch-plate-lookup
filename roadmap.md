@@ -1,3 +1,4 @@
 # Roadmap
 
-- [ ] Fix iframe auto-resize: public/embed-height.js ontbreekt → aanmaken en embed.tsx onSubmit herstellen zodat e-mails ook vanuit embeds verstuurd worden
+- [x] Fix iframe auto-resize: public/embed-height.js aangemaakt + getest (276px → 951px bij stap 2); embed stuurt nu ook aanvragen per e-mail
+- [ ] Publiceren zodat embed-height.js live staat
