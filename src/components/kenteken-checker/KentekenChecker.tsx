@@ -77,7 +77,7 @@ function GroupLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function KentekenChecker({ onSubmit, className }: Props) {
+export function KentekenChecker({ onSubmit, apiBase = "", className }: Props) {
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [plate, setPlate] = useState("");
   const [vehicle, setVehicle] = useState<VehicleInfo | null>(null);
