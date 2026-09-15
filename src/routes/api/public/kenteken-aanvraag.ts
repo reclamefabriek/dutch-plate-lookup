@@ -1,6 +1,10 @@
+import { createElement } from "react";
+import { renderAsync } from "@react-email/render";
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { sendTemplateEmail } from "@/lib/email-templates/send-email";
+import { template } from "@/lib/email-templates/kenteken-aanvraag";
+import { sendViaSmtp, smtpConfigured } from "@/lib/smtp.server";
 
 const NOTIFY = ["nick@reclamefabriek.nl", "autoservice@rickvandiepen.nl"] as const;
 
