@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EmbedRouteImport } from './routes/embed'
+import { Route as ApiPublicKentekenAanvraagRouteImport } from './routes/api/public/kenteken-aanvraag'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +24,12 @@ const EmbedRoute = EmbedRouteImport.update({
   path: '/embed',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicKentekenAanvraagRoute =
+  ApiPublicKentekenAanvraagRouteImport.update({
+    id: '/api/public/kenteken-aanvraag',
+    path: '/api/public/kenteken-aanvraag',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const LovableEmailTransactionalPreviewRoute =
   LovableEmailTransactionalPreviewRouteImport.update({
     id: '/lovable/email/transactional/preview',
@@ -33,30 +40,47 @@ const LovableEmailTransactionalPreviewRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/embed': typeof EmbedRoute
+  '/api/public/kenteken-aanvraag': typeof ApiPublicKentekenAanvraagRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/embed': typeof EmbedRoute
+  '/api/public/kenteken-aanvraag': typeof ApiPublicKentekenAanvraagRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/embed': typeof EmbedRoute
+  '/api/public/kenteken-aanvraag': typeof ApiPublicKentekenAanvraagRoute
   '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/embed' | '/lovable/email/transactional/preview'
+  fullPaths:
+    | '/'
+    | '/embed'
+    | '/api/public/kenteken-aanvraag'
+    | '/lovable/email/transactional/preview'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/embed' | '/lovable/email/transactional/preview'
-  id: '__root__' | '/' | '/embed' | '/lovable/email/transactional/preview'
+  to:
+    | '/'
+    | '/embed'
+    | '/api/public/kenteken-aanvraag'
+    | '/lovable/email/transactional/preview'
+  id:
+    | '__root__'
+    | '/'
+    | '/embed'
+    | '/api/public/kenteken-aanvraag'
+    | '/lovable/email/transactional/preview'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   EmbedRoute: typeof EmbedRoute
+  ApiPublicKentekenAanvraagRoute: typeof ApiPublicKentekenAanvraagRoute
   LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
 }
 
@@ -76,6 +100,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmbedRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/kenteken-aanvraag': {
+      id: '/api/public/kenteken-aanvraag'
+      path: '/api/public/kenteken-aanvraag'
+      fullPath: '/api/public/kenteken-aanvraag'
+      preLoaderRoute: typeof ApiPublicKentekenAanvraagRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/transactional/preview': {
       id: '/lovable/email/transactional/preview'
       path: '/lovable/email/transactional/preview'
@@ -89,6 +120,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   EmbedRoute: EmbedRoute,
+  ApiPublicKentekenAanvraagRoute: ApiPublicKentekenAanvraagRoute,
   LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
 }
 export const routeTree = rootRouteImport
