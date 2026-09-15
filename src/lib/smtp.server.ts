@@ -84,12 +84,14 @@ async function sendViaWorkerSocket(
   const decoder = new TextDecoder();
   let buffer = "";
 
+  function isComplete(text: string) {
+    const lines = text.replace(/\r\n$/, "").split("\r\n");
+    const last = lines[lines.length - 1] ?? "";
+    return /^\d{3} /.test(last);
+  }
+
   async function read(expected: number[]): Promise<string> {
-    for (;;) {
-      const complete = /^\d{3} [^\n]*\r?\n$|(?:^|\n)\d{3} [^\n]*\r?\n$/.test(
-        buffer,
-      );
-      if (buffer && complete) break;
+    while (!(buffer.endsWith("\n") && isComplete(buffer))) {
       const { value, done } = await reader.read();
       if (done) break;
       buffer += decoder.decode(value, { stream: true });
