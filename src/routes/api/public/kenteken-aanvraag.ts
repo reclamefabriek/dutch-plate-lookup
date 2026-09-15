@@ -1,6 +1,10 @@
+import { createElement } from "react";
+import { render } from "@react-email/render";
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { sendTemplateEmail } from "@/lib/email-templates/send-email";
+import { template } from "@/lib/email-templates/kenteken-aanvraag";
+import { sendViaSmtp, smtpConfigured } from "@/lib/smtp.server";
 
 const NOTIFY = ["nick@reclamefabriek.nl", "autoservice@rickvandiepen.nl"] as const;
 
@@ -63,12 +67,20 @@ export const Route = createFileRoute("/api/public/kenteken-aanvraag")({
         }
 
         const id = crypto.randomUUID();
+        const useSmtp = smtpConfigured();
+        const html = useSmtp
+          ? await render(createElement(template.component, parsed))
+          : "";
+        const subject = template.subject(parsed);
+
         const results = await Promise.allSettled(
           NOTIFY.map((to) =>
-            sendTemplateEmail("kenteken-aanvraag", to, {
-              templateData: parsed,
-              idempotencyKey: `kenteken-aanvraag-${id}-${to}`,
-            }),
+            useSmtp
+              ? sendViaSmtp({ to, subject, html })
+              : sendTemplateEmail("kenteken-aanvraag", to, {
+                  templateData: parsed,
+                  idempotencyKey: `kenteken-aanvraag-${id}-${to}`,
+                }),
           ),
         );
 
