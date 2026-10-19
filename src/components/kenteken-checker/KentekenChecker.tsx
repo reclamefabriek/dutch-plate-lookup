@@ -4,7 +4,7 @@ import {
   ClipboardCheck,
   Wrench,
   Snowflake,
-  Volume2,
+  Lightbulb,
   AlertTriangle,
   HelpCircle,
   Loader2,
@@ -51,7 +51,7 @@ const ISSUES: Service[] = [
     id: "lamp",
     title: "Lamp vervangen",
     subtitle: "Snel weer zichtbaar",
-    icon: Volume2,
+    icon: Lightbulb,
     price: 5,
   },
   {
