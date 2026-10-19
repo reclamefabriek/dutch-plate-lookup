@@ -31,23 +31,35 @@ type Props = {
 };
 
 
-type Service = { id: string; title: string; subtitle: string; icon: typeof Wrench };
+type Service = { id: string; title: string; subtitle: string; icon: typeof Wrench; price?: number };
 
 const KNOWN: Service[] = [
-  { id: "apk", title: "APK-keuring", subtitle: "De wettelijke keuring", icon: ClipboardCheck },
-  { id: "onderhoud", title: "Onderhoudsbeurt", subtitle: "Kleine of grote beurt", icon: Wrench },
-  { id: "airco", title: "Airco service", subtitle: "Bijvullen en nakijken", icon: Snowflake },
+  { id: "apk", title: "APK-keuring", subtitle: "De wettelijke keuring", icon: ClipboardCheck, price: 60 },
+  { id: "onderhoud", title: "Onderhoud", subtitle: "Kleine of grote beurt", icon: Wrench, price: 100 },
+  { id: "airco", title: "Airco service", subtitle: "Bijvullen en nakijken", icon: Snowflake, price: 125 },
 ];
 
 const ISSUES: Service[] = [
-  { id: "geluid", title: "Een vreemd geluid", subtitle: "Gerammel, gepiep of getik", icon: Volume2 },
   {
-    id: "lampje",
-    title: "Lampje op mijn dashboard",
-    subtitle: "Ik weet niet wat het betekent",
+    id: "storing",
+    title: "Storing uitlezen",
+    subtitle: "Foutcode uitlezen en duiden",
     icon: AlertTriangle,
+    price: 20,
   },
-  { id: "anders", title: "Iets anders", subtitle: "Ik leg het je zelf even uit", icon: HelpCircle },
+  {
+    id: "lamp",
+    title: "Lamp vervangen",
+    subtitle: "Snel weer zichtbaar",
+    icon: Volume2,
+    price: 5,
+  },
+  {
+    id: "anders",
+    title: "Iets anders",
+    subtitle: "Ik leg het je zelf even uit",
+    icon: HelpCircle,
+  },
 ];
 
 function ServiceCard({ service, onClick }: { service: Service; onClick: () => void }) {
@@ -64,6 +76,9 @@ function ServiceCard({ service, onClick }: { service: Service; onClick: () => vo
       <span className="min-w-0">
         <span className="block font-semibold text-foreground">{service.title}</span>
         <span className="block truncate text-sm text-muted-foreground">{service.subtitle}</span>
+        {service.price != null && (
+          <span className="mt-0.5 block text-sm font-semibold text-primary">vanaf €{service.price}</span>
+        )}
       </span>
     </button>
   );
